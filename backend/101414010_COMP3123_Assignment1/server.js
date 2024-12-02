@@ -8,11 +8,17 @@ const cors = require('cors');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-app.use(cors()); // Enable CORS for all routes
+app.use(
+    cors({
+      origin: ['http://localhost:3000', 'http://frontend:3000'],
+      credentials: true,
+    })
+  );
+ // Enable CORS for all routes
 
 //Routes
 app.use('/api/v1/user', userRoutes);

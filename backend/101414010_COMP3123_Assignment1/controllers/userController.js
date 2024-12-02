@@ -10,7 +10,7 @@ exports.signup = async (req, res) => {
     const { username, email, password } = req.body;
     try {
         // Check if user already exists
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email: email });
         if (existingUser) return res.status(400).json({ error: 'Email already in use' });
 
         // Hash the password and create a new user
@@ -32,7 +32,7 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: email });
         if (!user) return res.status(404).json({ error: 'User not found' });
 
         // Ensure correct comparison by trimming any excess spaces

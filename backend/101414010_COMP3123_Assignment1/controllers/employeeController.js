@@ -37,11 +37,19 @@ exports.createEmployee = async (req, res) => {
 //Get All Employees
 exports.getAllEmployees = async (req, res) => {
     try {
-        const employees = await Employee.find();
-        // we will be using status code 200 to return the employees
+        const { department, position } = req.query;
+        const filter = {};
+
+        if (department) {
+            filter.department = new RegExp(department, 'i');  // Case-insensitive search
+        }
+        if (position) {
+            filter.position = new RegExp(position, 'i');
+        }
+
+        const employees = await Employee.find(filter);
         res.status(200).json(employees);
     } catch (error) {
-        // we will be using status code 500 if there is any error
         res.status(500).json({ message: error.message });
     }
 };
