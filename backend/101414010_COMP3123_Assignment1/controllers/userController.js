@@ -22,7 +22,7 @@ exports.signup = async (req, res) => {
         /*const token = jwt.sign({ id: newUser._id }, secret, { expiresIn: '1h' }); */
 
         // Send response with token
-        res.status(201).json({ message: 'User created successfully' }); // we used token here earlier
+        res.status(201).json({ message: 'User created successfully' }); // I used token here earlier
     } catch (error) {
         res.status(500).json({ error: error.message || 'Signup failed' });
     }

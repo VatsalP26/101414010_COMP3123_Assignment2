@@ -34,14 +34,14 @@ exports.createEmployee = async (req, res) => {
 };
 
 
-//Get All Employees
+//Get All Employees and Search Functionality
 exports.getAllEmployees = async (req, res) => {
     try {
         const { department, position } = req.query;
         const filter = {};
 
         if (department) {
-            filter.department = new RegExp(department, 'i');  // Case-insensitive search
+            filter.department = new RegExp(department, 'i');  
         }
         if (position) {
             filter.position = new RegExp(position, 'i');

@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Signup = () => {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -14,15 +14,14 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    if (password !== confirmPassword) {
-      setError("Passwords don't match");
-      setLoading(false);
-      return;
-    }
     try {
-      const response = await axios.post('http://localhost:5000/api/v1/user/signup', { email, password });
+      const response = await axios.post('http://localhost:5000/api/v1/user/signup', {
+        username,
+        email,
+        password,
+      });
       localStorage.setItem('token', response.data.token);
-      navigate('/employees');
+      navigate('/');
     } catch (error) {
       setError(error.response ? error.response.data.message : 'Error during signup');
     } finally {
@@ -36,6 +35,14 @@ const Signup = () => {
         <h2 style={styles.heading}>Sign Up</h2>
         {error && <p style={styles.errorText}>{error}</p>}
         <form onSubmit={handleSubmit} style={styles.form}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            style={styles.input}
+          />
           <input
             type="email"
             placeholder="Email"
@@ -52,20 +59,19 @@ const Signup = () => {
             required
             style={styles.input}
           />
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <button type="submit" disabled={loading} style={loading ? {...styles.button, ...styles.buttonDisabled} : styles.button}>
+          <button
+            type="submit"
+            disabled={loading}
+            style={loading ? { ...styles.button, ...styles.buttonDisabled } : styles.button}
+          >
             {loading ? 'Signing up...' : 'Sign Up'}
           </button>
         </form>
         <p style={styles.text}>
-          Already have an account? <button onClick={() => navigate('/')} style={styles.link}>Login</button>
+          Already have an account?{' '}
+          <button onClick={() => navigate('/')} style={styles.link}>
+            Login
+          </button>
         </p>
       </div>
     </div>
@@ -109,9 +115,6 @@ const styles = {
     outline: 'none',
     transition: 'border-color 0.3s ease',
   },
-  inputFocus: {
-    borderColor: '#ff7f50',
-  },
   button: {
     padding: '14px',
     borderRadius: '8px',
@@ -139,7 +142,7 @@ const styles = {
     color: '#ff6347',
     cursor: 'pointer',
     textDecoration: 'underline',
-  }
+  },
 };
 
 export default Signup;
